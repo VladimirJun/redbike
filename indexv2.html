@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!doctype html>
+        <html lang="es">
+        <head>
+        <meta charset="utf-8" />
+        <title>It's Better By Bike! - Comprar bicicleta en 1 clic | España</title>
+    <meta name="description" content="Comprar bicicletas y electosamokаты en 1 clic. Entrega rápida a tu alojamiento de vacaciones en España. Sin papeleo, pago seguro Visa." />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "It's Better By Bike! Rental & Delivery",
+            "description": "Alquiler y entrega de bicicletas a tu lugar de vacaciones",
+            "priceRange": "€349-€899"
+        }
+    </script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        * { margin: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6; overflow-x: hidden;
+        }
+
+        /* 🎡 КОЛЕСА - закругления rentabikealicante */
+        .wheel-deco {
+            position: absolute;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.3) 70%);
+            box-shadow: 0 -20px 40px rgba(255,255,255,0.4), inset 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .wheel-deco.bottom {
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+            background: radial-gradient(circle at 70% 70%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.2) 70%);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2), inset 0 -10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* 🏔️ Hero горный фон */
+        .hero-bg {
+            position: relative;
+            background: linear-gradient(135deg, rgba(15,23,42,0.9) 0%, rgba(30,41,59,0.95) 100%),
+            url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover; background-position: center; min-height: 100vh;
+        }
+
+        /* 🔝 Wheel НАД Products секцией */
+        .wheel-over-products {
+            position: absolute;
+            top: -80px; left: 50%; transform: translateX(-50%);
+            width: 160px; height: 160px; z-index: 10;
+        }
+
+        /* ⬇️ Wheel ПЕРЕД Footer */
+        .wheel-before-footer {
+            position: absolute;
+            bottom: -80px; right: 20%; width: 180px; height: 180px; z-index: 10;
+        }
+
+        .glass { background: rgba(255,255,255,0.1); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.2); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white; border: none; border-radius: 50px; font-weight: 700;
+            padding: 20px 40px; font-size: 18px; cursor: pointer;
+            box-shadow: 0 25px 50px rgba(59,130,246,0.4);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 35px 70px rgba(59,130,246,0.5); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50px; padding: 18px 36px; font-weight: 600; transition: all 0.3s ease;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.3); }
+
+        .product-card {
+            background: rgba(255,255,255,0.97); backdrop-filter: blur(24px);
+            border-radius: 36px; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.15);
+            transition: all 0.5s cubic-bezier(0.4,0,0.2,1); border: 1px solid rgba(255,255,255,0.5);
+        }
+        .product-card:hover {
+            transform: translateY(-20px) scale(1.03); box-shadow: 0 60px 120px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    const { useState } = React;
+
+    const App = () => {
+        const [cartCount, setCartCount] = useState(0);
+
+        const products = [
+            {
+                id: "bike-urban", name: "Bicicleta Urbana Premium", category: "Городской",
+                price: "549€", image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                description: "Para paseos por la costa mediterránea y ciudad"
+            },
+            {
+                id: "escooter", name: "Electrosamokat City Pro", category: "самокаты, городской",
+                price: "349€", image: "https://images.unsplash.com/photo-1585229384656-922d48bd051e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                description: "Compacto y rápido para tus vacaciones en Alicante"
+            },
+            {
+                id: "mtb", name: "MTB Alicante Trail", category: "Горный",
+                price: "699€", image: "https://images.unsplash.com/photo-1578662996440-5014d4e977f2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                description: "Para rutas por Sierra de Aitana y montaña"
+            },
+            {
+                id: "e-bike", name: "E-Bike Costa Blanca", category: "Электро",
+                price: "899€", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                description: "Asistencia eléctrica para toda la Costa Blanca"
+            }
+        ];
+
+        return (
+            <div style={{ position: 'relative', minHeight: '100vh' }}>
+
+                {/* 📱 Fixed Header */}
+                <header style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 2000,
+                    background: 'rgba(255,255,255,0.97)', backdropFilter: 'blur(24px)',
+                    padding: '24px 48px', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    boxShadow: '0 4px 30px rgba(0,0,0,0.15)', borderBottom: '1px solid rgba(255,255,255,0.3)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                        <div style={{
+                            width: 56, height: 56, borderRadius: '50%', background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px',
+                            color: 'white', boxShadow: '0 15px 40px rgba(59,130,246,0.5)'
+                        }}>🚴</div>
+                        <div>
+                            <div style={{ fontSize: '24px', fontWeight: 900, color: '#1e293b' }}>It's Better By Bike!</div>
+                            <div style={{ fontSize: '15px', color: '#64748b' }}>Alquiler Alicante • Guardamar 2026</div>
+                        </div>
+                    </div>
+                    <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                        <button className="btn-secondary" style={{ padding: '16px 32px', fontSize: '16px' }}>
+                            📞 +34 600 123 456
+                        </button>
+                        <button style={{
+                            position: 'relative', width: 64, height: 64, borderRadius: '50%', border: '2px solid #e2e8f0',
+                            background: cartCount > 0 ? 'linear-gradient(135deg, #10b981, #059669)' : 'white',
+                            color: cartCount > 0 ? 'white' : '#1e293b', fontSize: '24px', cursor: 'pointer',
+                            transition: 'all 0.4s cubic-bezier(0.4,0,0.2,1)', boxShadow: '0 12px 35px rgba(0,0,0,0.2)'
+                        }}
+                                onClick={() => setCartCount(c => c + 1)}>
+                            <i className="fas fa-shopping-cart"></i>
+                            {cartCount > 0 && (
+                                <span style={{
+                                    position: 'absolute', top: -2, right: -2, width: 28, height: 28, borderRadius: '50%',
+                                    background: '#ef4444', color: 'white', fontSize: '14px', fontWeight: 900,
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                    boxShadow: '0 6px 20px rgba(239,68,68,0.5)', border: '3px solid white'
+                                }}>{cartCount}</span>
+                            )}
+                        </button>
+                    </div>
+                </header>
+
+                {/* 🏔️ Hero - ГОРНЫЙ ФОН + колесо СВЕРХУ */}
+                <section className="hero-bg" style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    minHeight: '100vh', position: 'relative', paddingTop: '120px', paddingBottom: '120px'
+                }}>
+                    <div className="wheel-deco" style={{ top: '80px', left: '15%', width: '140px', height: '140px' }}></div>
+                    <div className="wheel-deco bottom" style={{ bottom: '80px', right: '15%', width: '160px', height: '160px' }}></div>
+
+                    <div style={{
+                        position: 'relative', zIndex: 5, maxWidth: '1100px', margin: '0 auto',
+                        padding: '0 40px', textAlign: 'center', color: 'white'
+                    }}>
+                        <h1 style={{
+                            fontSize: 'clamp(3.5rem, 11vw, 8rem)', fontWeight: 950, marginBottom: '40px',
+                            background: 'linear-gradient(135deg, #fef3c7 0%, #f59e0b 50%, #ef4444 100%)',
+                            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+                            lineHeight: 1.1, letterSpacing: '-0.04em', textShadow: '0 20px 80px rgba(0,0,0,0.9)'
+                        }}>
+                            🚴 <span style={{ position: 'relative', display: 'inline-block' }}>
+                  en 1 clic
+                  <span style={{
+                      position: 'absolute', top: '-24px', right: '-60px',
+                      background: 'linear-gradient(45deg, #ef4444, #dc2626)', color: 'white',
+                      padding: '14px 24px', borderRadius: '35px', fontSize: '20px', fontWeight: 950,
+                      boxShadow: '0 20px 50px rgba(239,68,68,0.7)', animation: 'shine 2s infinite'
+                  }}>COMPRAR</span>
+                </span>
+                        </h1>
+                        <p style={{
+                            fontSize: 'clamp(1.5rem, 5.5vw, 2.4rem)', marginBottom: '80px',
+                            opacity: 0.98, lineHeight: 1.7, maxWidth: '900px', margin: '0 auto 80px auto'
+                        }}>
+                            <strong>Sin colas • Sin papeleo • Entrega 24h</strong><br/>
+                            Alicante ↔ Guardamar ↔ Costa Blanca
+                        </p>
+                        <div style={{ display: 'flex', gap: '36px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                            <button className="btn-primary" onClick={() => setCartCount(c => c + 1)} style={{ fontSize: '24px' }}>
+                                ⚡ Comprar YA
+                            </button>
+                            <a href="#productos" className="btn-secondary" style={{ padding: '22px 48px', fontSize: '20px' }}>
+                                <i className="fas fa-bicycle" style={{ marginRight: 12 }}></i>Ver catálogo
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 🔥 Products секция - с колесом СВЕРХУ */}
+                <section id="productos" style={{
+                    padding: '200px 60px 140px', /* Увеличил padding-top для колеса */
+                    background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fca5a5 100%)',
+                    position: 'relative', overflow: 'visible'
+                }}>
+                    {/* 🎡 КОЛЕСО НАД секцией Products */}
+                    <div className="wheel-over-products">
+                        <div className="wheel-deco" style={{ width: '100%', height: '100%' }}></div>
+                    </div>
+
+                    <div style={{ maxWidth: '1700px', margin: '0 auto', textAlign: 'center', marginBottom: '140px' }}>
+                        <h2 style={{
+                            fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 950, color: '#1e293b',
+                            marginBottom: '32px', position: 'relative', zIndex: 10, lineHeight: 1.2
+                        }}>
+                <span style={{ color: '#dc2626', textShadow: '0 8px 32px rgba(220,38,38,0.3)' }}>
+                  🔥 Best-sellers
+                </span><br/>Alicante 2026
+                        </h2>
+                        <p style={{
+                            fontSize: '1.8rem', color: '#92400e', maxWidth: '900px',
+                            margin: '0 auto', position: 'relative', zIndex: 10, fontWeight: 600
+                        }}>
+                            +5️⃣.000 ciclistas felices • Entrega Guardamar ↔ Alicante Airport
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(460px, 1fr))',
+                        gap: '72px', maxWidth: '1700px', margin: '0 auto', position: 'relative', zIndex: 10
+                    }}>
+                        {products.map((product, i) => (
+                            <div key={product.id} className="product-card" style={{ cursor: 'pointer' }}>
+                                <div className="bike-image" style={{
+                                    backgroundImage: `url(${product.image})`,
+                                    backgroundSize: 'cover', backgroundPosition: 'center'
+                                }}></div>
+                                <div style={{ padding: '64px' }}>
+                                    <div style={{
+                                        background: 'linear-gradient(135deg, #ef4444, #dc2626)', color: 'white',
+                                        fontSize: '16px', fontWeight: 900, textTransform: 'uppercase',
+                                        padding: '14px 28px', borderRadius: '35px', display: 'inline-block',
+                                        marginBottom: '32px', letterSpacing: '1.2px',
+                                        boxShadow: '0 12px 35px rgba(239,68,68,0.5)'
+                                    }}>
+                                        {product.category}
+                                    </div>
+                                    <h3 style={{
+                                        fontSize: '44px', fontWeight: 950, color: '#1e293b',
+                                        marginBottom: '24px', lineHeight: 1.3
+                                    }}>
+                                        {product.name}
+                                    </h3>
+                                    <p style={{
+                                        color: '#92400e', marginBottom: '56px', fontSize: '24px',
+                                        lineHeight: 1.7, backdropFilter: 'blur(16px)', fontWeight: 500
+                                    }}>
+                                        {product.description}
+                                    </p>
+                                    <div style={{
+                                        fontSize: '68px', fontWeight: 950, color: '#dc2626',
+                                        marginBottom: '56px', textShadow: '0 12px 40px rgba(220,38,38,0.4)',
+                                        lineHeight: 1
+                                    }}>
+                                        {product.price}
+                                    </div>
+                                    <button className="btn-primary" onClick={() => setCartCount(c => c + 1)}
+                                            style={{ width: '100%', fontSize: '24px', padding: '32px' }}>
+                                        <i className="fas fa-shopping-cart" style={{ marginRight: 24, fontSize: '28px' }}></i>
+                                        🛒 Añadir al carrito (1 clic)
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* ✅ Trust Indicators */}
+                <section style={{ padding: '140px 60px', background: 'rgba(255,255,255,0.98)', position: 'relative' }}>
+                    <div className="wheel-deco" style={{ top: '-50px', left: '25%', width: '150px', height: '150px' }}></div>
+                    <div className="wheel-deco bottom" style={{ bottom: '-50px', right: '30%', width: '170px', height: '170px' }}></div>
+
+                    <div style={{
+                        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+                        gap: '64px', maxWidth: '1700px', margin: '0 auto'
+                    }}>
+                        {[
+                            { icon: 'fas fa-truck', title: '🚚 Entrega 24h', desc: 'Directo a tu hotel/apartamento' },
+                            { icon: 'fas fa-credit-card', title: '💳 Visa 100% Seguro', desc: 'Sin sorpresas ocultas' },
+                            { icon: 'fas fa-users', title: '+5️⃣K Clientes Felices', desc: 'Verano 2026 • 4.9⭐' },
+                            { icon: 'fas fa-map-marker-alt', title: '🏖️ Costa Blanca Completa', desc: 'Alicante • Guardamar • Santa Pola' }
+                        ].map((item, i) => (
+                            <div key={i} style={{
+                                textAlign: 'center', padding: '56px 40px',
+                                background: 'rgba(255,255,255,0.7)', borderRadius: '32px',
+                                boxShadow: '0 25px 80px rgba(0,0,0,0.12)', backdropFilter: 'blur(20px)',
+                                border: '1px solid rgba(255,255,255,0.6)', transition: 'all 0.4s ease',
+                                cursor: 'pointer'
+                            }}
+                                 onMouseOver={e => {
+                                     e.currentTarget.style.transform = 'translateY(-8px)';
+                                     e.currentTarget.style.boxShadow = '0 35px 100px rgba(0,0,0,0.2)';
+                                 }}
+                                 onMouseOut={e => {
+                                     e.currentTarget.style.transform = 'translateY(0)';
+                                     e.currentTarget.style.boxShadow = '0 25px 80px rgba(0,0,0,0.12)';
+                                 }}>
+                                <div style={{ fontSize: '72px', color: '#10b981', marginBottom: '32px' }}>
+                                    <i className={item.icon}></i>
+                                </div>
+                                <div style={{ fontSize: '36px', fontWeight: 950, color: '#1e293b', marginBottom: '20px' }}>
+                                    {item.title}
+                                </div>
+                                <div style={{ fontSize: '22px', color: '#64748b', lineHeight: 1.6 }}>
+                                    {item.desc}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* 🎯 Final CTA - колесо ПЕРЕД Footer */}
+                <section className="hero-bg" style={{
+                    padding: '160px 60px 240px', display: 'flex', alignItems: 'center',
+                    position: 'relative', minHeight: '80vh'
+                }}>
+                    <div className="wheel-deco" style={{ top: '80px', left: '30%', width: '140px', height: '140px' }}></div>
+                    <div className="wheel-deco bottom" style={{ bottom: '80px', right: '25%', width: '160px', height: '160px' }}></div>
+
+                    <div style={{
+                        position: 'relative', zIndex: 5, maxWidth: '1100px', margin: '0 auto',
+                        textAlign: 'center', color: 'white', padding: '0 40px'
+                    }}>
+                        <h2 style={{
+                            fontSize: 'clamp(4rem, 10vw, 7rem)', fontWeight: 950, marginBottom: '48px',
+                            textShadow: '0 24px 96px rgba(0,0,0,1)', lineHeight: 1.2
+                        }}>
+                            ¿Listo para <span style={{
+                            color: '#fef3c7', textShadow: '0 0 60px #f59e0b',
+                            background: 'linear-gradient(135deg, #fef3c7, #f59e0b)',
+                            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+                        }}>
+                  🚴 conquistar
+                </span> la Costa Blanca?
+                        </h2>
+                        <p style={{
+                            fontSize: 'clamp(1.6rem, 5vw, 2.8rem)', opacity: 0.99,
+                            marginBottom: '96px', lineHeight: 1.7, maxWidth: '1000px', margin: '0 auto 96px auto'
+                        }}>
+                            Tu bicicleta nueva en Alicante Airport, Guardamar, Santa Pola o cualquier playa
+                        </p>
+                        <button className="btn-primary" style={{
+                            fontSize: '28px', padding: '36px 72px',
+                            boxShadow: '0 40px 100px rgba(59,130,246,0.7)'
+                        }}>
+                            <i className="fas fa-bicycle" style={{ marginRight: 24, fontSize: '34px' }}></i>
+                            🚀 ELEGIR MI BICICLETA
+                        </button>
+                    </div>
+
+                    {/* 🎡 КОЛЕСО ПЕРЕД FOOTER */}
+                    <div className="wheel-before-footer">
+                        <div className="wheel-deco bottom" style={{ width: '100%', height: '100%' }}></div>
+                    </div>
+                </section>
+
+                {/* 📄 Footer */}
+                <footer style={{
+                    background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
+                    color: '#cbd5e1', padding: '200px 60px 60px', /* Увеличил padding-top */
+                    textAlign: 'center', position: 'relative', overflow: 'hidden'
+                }}>
+                    <div className="wheel-deco" style={{
+                        top: '40px', left: '15%', width: '120px', height: '120px',
+                        background: 'radial-gradient(circle, rgba(15,23,42,0.95), rgba(30,41,59,0.8))'
+                    }}></div>
+                    <div className="wheel-deco bottom" style={{
+                        bottom: '40px', right: '15%', width: '140px', height: '140px'
+                    }}></div>
+
+                    <div style={{ maxWidth: '1500px', margin: '0 auto 72px' }}>
+                        <div style={{
+                            fontSize: '52px', fontWeight: 950, color: 'white',
+                            marginBottom: '32px', textShadow: '0 8px 40px rgba(0,0,0,0.8)'
+                        }}>
+                            It's Better By Bike!
+                        </div>
+                        <div style={{
+                            fontSize: '24px', opacity: 0.95, maxWidth: '900px', margin: '0 auto 56px auto'
+                        }}>
+                            Alquiler y entrega de bicicletas • Alicante Airport ↔ Guardamar del Segura • España 2026
+                        </div>
+                    </div>
+                    <div style={{
+                        fontSize: '20px', opacity: 0.88, display: 'flex',
+                        justifyContent: 'center', gap: '64px', flexWrap: 'wrap', maxWidth: '1200px',
+                        margin: '0 auto', lineHeight: 1.6
+                    }}>
+                        <div><i className="fas fa-credit-card" style={{ color: '#3b82f6', marginRight: 12, fontSize: '24px' }}></i>
+                            Pago Visa seguro</div>
+                        <div><i className="fas fa-truck" style={{ color: '#10b981', marginRight: 12, fontSize: '24px' }}></i>
+                            Entrega 24h garantizada</div>
+                        <div><i className="fas fa-undo" style={{ color: '#f59e0b', marginRight: 12, fontSize: '24px' }}></i>
+                            Cancelación gratuita 24h</div>
+                    </div>
+                </footer>
+            </div>
+        );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

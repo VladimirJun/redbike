@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>BikeStore España - Tu bici nueva YA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        .float { animation: float 4s ease-in-out infinite; }
+        @keyframes shine { 0%{box-shadow:0 0 20px rgba(59,130,246,0.4)}50%{box-shadow:0 0 40px rgba(59,130,246,0.8)}100%{box-shadow:0 0 20px rgba(59,130,246,0.4)}}
+        .shine { animation: shine 2s infinite; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    const Landing = () => (
+        <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#334155 100%)'}}>
+            {/* Floating badges 2026 trend */}
+            <div style={{position:'fixed',top:'20px',left:'20px',zIndex:999,display:'flex',gap:'12px'}}>
+                <div className="glass float" style={{padding:'12px 20px',borderRadius:'50px',fontSize:'13px',color:'white'}}>
+                    <i className="fas fa-crown" style={{color:'#fbbf24',marginRight:'6px'}}></i>Nuevo
+                </div>
+                <div className="glass float" style={{padding:'12px 20px',borderRadius:'50px',fontSize:'13px',color:'white'}}>
+                    4.9⭐ <span style={{color:'#10b981'}}>+3.2K opiniones</span>
+                </div>
+            </div>
+
+            <div style={{maxWidth:'1200px',margin:'0 auto',padding:'60px 24px'}}>
+                {/* HERO 2026: Video-like gradient + scroll-triggered */}
+                <div style={{textAlign:'center',padding:'80px 0'}}>
+                    <h1 style={{
+                        fontSize:'clamp(3rem,8vw,6rem)',fontWeight:900,
+                        background:'linear-gradient(135deg,#fef3c7 0%,#f59e0b 50%,#ef4444 100%)',
+                        WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',
+                        marginBottom:'24px',letterSpacing:'-0.02em',lineHeight:1.1
+                    }}>
+                        Tu bici nueva en <span style={{position:'relative'}}>
+                3 clics
+                <span style={{
+                    position:'absolute',top:'-8px',right:'-20px',
+                    background:'linear-gradient(45deg,#ef4444,#f59e0b)',
+                    color:'white',fontSize:'12px',fontWeight:700,padding:'4px 8px',
+                    borderRadius:'12px',animation:'shine 2s infinite'
+                }}>YA</span>
+              </span>
+                    </h1>
+                    <p style={{fontSize:'clamp(1.2rem,3vw,1.5rem)',color:'#cbd5e1',maxWidth:'600px',margin:'0 auto 48px'}}>
+                        <strong>Olvídate de tiendas y esperas:</strong> elige → paga Visa → recibe en casa
+                    </p>
+
+                    {/* Dual CTA 2026 trend */}
+                    <div style={{display:'flex',gap:'20px',justifyContent:'center',flexWrap:'wrap'}}>
+                        <a href="welcome.html" style={{
+                            padding:'20px 40px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+                            color:'white',textDecoration:'none',borderRadius:'50px',fontSize:'18px',
+                            fontWeight:700,boxShadow:'0 25px 50px rgba(59,130,246,0.4)',
+                            transition:'all 0.4s cubic-bezier(0.4,0,0.2,1)'
+                        }}
+                           onMouseOver={e=>e.target.style.transform='translateY(-4px) scale(1.02)'}
+                           onMouseOut={e=>e.target.style.transform='translateY(0) scale(1)'}>
+                            <i className="fas fa-bicycle" style={{marginRight:'12px'}}></i>
+                            Ver catálogos
+                        </a>
+                        <a href="catalog.html" style={{
+                            padding:'20px 40px',background:'rgba(255,255,255,0.15)',backdropFilter:'blur(20px)',
+                            color:'white',textDecoration:'none',borderRadius:'50px',border:'1px solid rgba(255,255,255,0.3)',
+                            fontSize:'18px',fontWeight:600,transition:'all 0.4s ease'
+                        }}
+                           onMouseOver={e=>e.target.style.background='rgba(255,255,255,0.25)'}
+                           onMouseOut={e=>e.target.style.background='rgba(255,255,255,0.15)'}>
+                            <i className="fas fa-fire" style={{marginRight:'12px',color:'#f59e0b'}}></i>
+                            Ofertas YA
+                        </a>
+                    </div>
+                </div>
+
+                {/* 2026 Scroll-triggered stats */}
+                <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(250px,1fr))',gap:'40px',margin:'120px 0'}}>
+                    {[
+                        {icon:'fas fa-shopping-cart',num:'5.247',text:'Pedidos este mes'},
+                        {icon:'fas fa-truck',num:'2-4',text:'Días entrega España'},
+                        {icon:'fas fa-credit-card',num:'Visa',text:'Pago 100% seguro'},
+                        {icon:'fas fa-users',num:'+15K',text:'Clientes felices'}
+                    ].map((stat,i)=>(
+                        <div key={i} style={{textAlign:'center',padding:'40px 20px'}}>
+                            <div style={{fontSize:'48px',color:'#3b82f6',marginBottom:'16px'}}>
+                                <i className={stat.icon}></i>
+                            </div>
+                            <div style={{fontSize:'clamp(2rem,6vw,3.5rem)',fontWeight:900,color:'white',marginBottom:'8px'}}>
+                                {stat.num}
+                            </div>
+                            <div style={{fontSize:'16px',color:'#cbd5e1'}}>{stat.text}</div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Floating testimonials 2026 */}
+                <div style={{position:'relative',height:'300px',margin:'120px 0'}}>
+                    <div style={{
+                        position:'absolute',top:'20%',left:'10%',width:'320px',className:'glass float',
+                        padding:'32px',borderRadius:'24px',boxShadow:'0 25px 50px rgba(0,0,0,0.2)'
+                    }}>
+                        <div style={{fontSize:'14px',color:'#94a3b8',marginBottom:'12px'}}>
+                            <i className="fas fa-star" style={{color:'#fbbf24'}}></i> 5.0
+                        </div>
+                        <p style={{fontSize:'16px',color:'white',marginBottom:'20px',lineHeight:1.5}}>
+                            "Mi primera bici eléctrica. Llegó perfecta en 3 días. ¡Muy recomendada!"
+                        </p>
+                        <div style={{fontSize:'14px',fontWeight:600,color:'white'}}>- María G., Madrid</div>
+                    </div>
+                    <div style={{
+                        position:'absolute',top:'50%',right:'10%',width:'320px',className:'glass float',
+                        padding:'32px',borderRadius:'24px',animation:'float 5s 1s infinite reverse',boxShadow:'0 25px 50px rgba(0,0,0,0.2)'
+                    }}>
+                        <div style={{fontSize:'14px',color:'#94a3b8',marginBottom:'12px'}}>
+                            <i className="fas fa-star" style={{color:'#fbbf24'}}></i> 4.9
+                        </div>
+                        <p style={{fontSize:'16px',color:'white',marginBottom:'20px',lineHeight:1.5}}>
+                            "Compré MTB para mi hijo. Excelente calidad y precio. Súper rápido."
+                        </p>
+                        <div style={{fontSize:'14px',fontWeight:600,color:'white'}}>- Carlos R., Barcelona</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Landing />);
+</script>
+</body>
+</html>

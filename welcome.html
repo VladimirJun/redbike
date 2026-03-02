@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>BikeStore - Elige tu estilo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * { margin: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, sans-serif;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fca5a5 100%);
+            min-height: 100vh;
+        }
+        .category-card {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.25);
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    const Welcome = () => {
+        const categories = [
+            {name:'Eléctricas',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400',link:'catalog.html?e-bike'},
+            {name:'Urbanas',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',link:'catalog.html?city'},
+            {name:'MTB',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400',link:'catalog.html?mtb'},
+            {name:'Trekking',img:'https://images.unsplash.com/photo-1558618047-3c8c76bd89e8?w=400',link:'catalog.html?trekking'},
+            {name:'Infantiles',img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400',link:'catalog.html?kids'}
+        ];
+
+        return (
+            <div style={{padding:'60px 24px',maxWidth:'1400px',margin:'0 auto'}}>
+                {/* Header */}
+                <div style={{textAlign:'center',marginBottom:'80px'}}>
+                    <h1 style={{
+                        fontSize:'clamp(2.5rem,7vw,4.5rem)',fontWeight:900,
+                        background:'linear-gradient(135deg,#1e293b 0%,#334155 100%)',
+                        WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent',
+                        marginBottom:'20px'
+                    }}>
+                        Elige tu estilo
+                    </h1>
+                    <p style={{fontSize:'1.3rem',color:'#1e293b',maxWidth:'600px',margin:'0 auto'}}>
+                        Encuentra la bicicleta perfecta para tu día a día
+                    </p>
+                </div>
+
+                {/* Category grid */}
+                <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))',gap:'32px'}}>
+                    {categories.map((cat,i)=>(
+                        <a key={i} href={cat.link} className="category-card" style={{display:'block',textDecoration:'none'}}>
+                            <div style={{
+                                height:'280px',background:`linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)),url(${cat.img})`,
+                                backgroundSize:'cover',backgroundPosition:'center'
+                            }}></div>
+                            <div style={{padding:'32px 24px'}}>
+                                <h3 style={{fontSize:'28px',fontWeight:800,color:'#1e293b',marginBottom:'8px'}}>
+                                    {cat.name}
+                                </h3>
+                                <div style={{display:'flex',alignItems:'center',gap:'12px',color:'#64748b'}}>
+                                    <i className="fas fa-arrow-right"></i>
+                                    <span>Ver modelos</span>
+                                </div>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+
+                {/* CTA bottom */}
+                <div style={{textAlign:'center',marginTop:'80px',padding:'40px',background:'rgba(255,255,255,0.5)',borderRadius:'24px'}}>
+                    <a href="landing.html" style={{
+                        padding:'20px 48px',background:'linear-gradient(135deg,#ef4444,#dc2626)',
+                        color:'white',textDecoration:'none',borderRadius:'50px',fontSize:'20px',fontWeight:700,
+                        boxShadow:'0 20px 40px rgba(239,68,68,0.4)'
+                    }}>
+                        <i className="fas fa-fire" style={{marginRight:'12px'}}></i>
+                        Ver ofertas especiales
+                    </a>
+                </div>
+            </div>
+        );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<Welcome />);
+</script>
+</body>
+</html>
