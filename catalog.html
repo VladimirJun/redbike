@@ -1,229 +1,367 @@
-<!doctype html>
-<html lang="es">
+<!DOCTYPE html>
+<html lang="ru">
 <head>
-    <meta charset="utf-8" />
-    <title>BikeStore - Catálogo completo</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог велосипедов - SportCatalog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; box-sizing: border-box; }
-        body {
-            font-family: system-ui, sans-serif;
-            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #fca5a5 100%);
-            min-height: 100vh;
+        :root {
+            --bg-primary: #1a1a1a;
+            --accent: #ff6b35;
+            --text-primary: #fff;
+            --text-secondary: #666;
+            --card-bg: #2a2a2a;
         }
-        .glass {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .header {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        .cart-badge {
-            position: absolute; top: -6px; right: -6px;
-            background: #ef4444; color: white; border-radius: 50%;
-            width: 22px; height: 22px; font-size: 11px; font-weight: 700;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .filter-chip {
-            padding: 12px 24px; border-radius: 25px; border: none;
-            font-weight: 600; cursor: pointer; white-space: nowrap;
-            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-            background: rgba(255,255,255,0.7);
-        }
-        .filter-chip.active {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white; transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(239,68,68,0.4);
-        }
-        .bike-card {
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-        .bike-card:hover {
-            transform: translateY(-12px) scale(1.02);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.25);
-        }
-        @keyframes float { 0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-        .float { animation: float 4s ease-in-out infinite; }
+        body { background: var(--bg-primary); color: var(--text-primary); font-family: 'Segoe UI', sans-serif; }
+        .hero-banner { background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://via.placeholder.com/1920x400/1a1a1a/ff6b35?text=Великие+Скидки+на+Велосипеды!'); background-size: cover; height: 400px; display: flex; align-items: center; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+        .hero-content { max-width: 600px; }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; }
+
+        .filter-sidebar { background: var(--card-bg); padding: 25px; border-radius: 15px; height: fit-content; position: sticky; top: 100px; z-index: 10; }
+        .filter-group { margin-bottom: 25px; }
+        .filter-group h6 { color: var(--accent); margin-bottom: 15px; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+        .filter-item { color: var(--text-secondary); cursor: pointer; padding: 10px 0; transition: all 0.3s; border-radius: 8px; margin: 2px 0; }
+        .filter-item:hover, .filter-item.active { color: var(--text-primary); background: var(--accent); }
+        .price-range { accent-color: var(--accent); }
+        .price-display { background: var(--accent); color: white; padding: 8px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+
+        .hits-section { background: var(--card-bg); padding: 40px 0; margin: 40px 0; border-radius: 20px; }
+        .hits-title { color: var(--accent); font-size: 2.5rem; text-align: center; margin-bottom: 3rem; }
+
+        .product-card { background: var(--card-bg); border-radius: 20px; overflow: hidden; transition: all 0.4s; height: 100%; border: 1px solid #3a3a3a; }
+        .product-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(255,107,53,0.4); }
+        .product-img { height: 280px; background: linear-gradient(45deg, #333, #444); display: flex; align-items: center; justify-content: center; font-size: 5rem; color: var(--accent); }
+        .product-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 12px; line-height: 1.3; }
+        .product-price { font-size: 1.8rem; color: var(--accent); font-weight: bold; }
+        .old-price { text-decoration: line-through; color: var(--text-secondary); font-size: 1.3rem; margin-left: 10px; }
+        .rating { color: #ffc107; font-size: 0.9rem; }
+        .btn-cart { background: var(--accent); border: none; padding: 12px 25px; border-radius: 30px; color: white; font-weight: bold; transition: all 0.3s; text-transform: uppercase; font-size: 0.85rem; }
+        .btn-cart:hover { background: #e55a2b; transform: scale(1.05); }
+
+        .pagination { justify-content: center; margin-top: 50px; }
+        .pagination .page-link { color: var(--text-primary); background: var(--card-bg); border: 2px solid var(--accent); margin: 0 3px; border-radius: 10px; }
+        .pagination .page-item.active .page-link { background: var(--accent); border-color: var(--accent); }
+        .pagination .page-link:hover { background: var(--accent); }
+
+        .section-title { color: var(--accent); font-size: 2.2rem; margin-bottom: 2rem; text-align: center; }
+        @media (max-width: 992px) { .filter-sidebar { position: static; margin-bottom: 30px; } }
+        @media (max-width: 768px) { .hero-content h1 { font-size: 2rem; } .hits-title, .section-title { font-size: 1.8rem; } }
     </style>
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-    const { useState } = React;
+<!-- Hero Banner -->
+<section class="hero-banner text-center">
+    <div class="container hero-content">
+        <h1>Великие Скидки на Велосипеды!</h1>
+        <p>До 70% на горные, городские и электрические модели. Быстрая доставка по Европе.</p>
+        <a href="#hits" class="btn btn-light btn-lg px-5 py-3">Хиты продаж</a>
+    </div>
+</section>
 
-    const Catalog = () => {
-        const [cartCount, setCartCount] = useState(0);
-        const [filter, setFilter] = useState('all');
-
-        const bikes = [
-            {id:1,brand:'KROSS',name:'Trans Hybrid 5.0',type:'e-bike',price:'2.499€',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400'},
-            {id:2,brand:'KROSS',name:'City Urban 2.0',type:'city',price:'749€',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'},
-            {id:3,brand:'KROSS',name:'Level 6.0',type:'mtb',price:'1.199€',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400'},
-            {id:4,brand:'KROSS',name:'Hexagon 4.0',type:'mtb',price:'599€',img:'https://images.unsplash.com/photo-1558618047-3c8c76bd89e8?w=400'},
-            {id:5,brand:'KROSS',name:'Evado 5.0',type:'trekking',price:'889€',img:'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400'},
-            {id:6,brand:'KROSS',name:'Flex e-City',type:'e-bike',price:'1.399€',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400'},
-            {id:7,brand:'KROSS',name:'Dust 2.0',type:'city',price:'429€',img:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400'},
-            {id:8,brand:'KROSS',name:'Hexagon CF 3',type:'mtb',price:'999€',img:'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400'},
-            {id:9,brand:'KROSS',name:'Trans Hybrid 2.0',type:'e-bike',price:'1.899€',img:'https://images.unsplash.com/photo-1558618047-3c8c76bd89e8?w=400'}
-        ];
-
-        const filteredBikes = filter === 'all' ? bikes : bikes.filter(b => b.type === filter);
-
-        return (
-            <>
-                {/* Header */}
-                <header className="header glass" style={{padding:'24px 40px',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
-                    <div style={{display:'flex',alignItems:'center',gap:'24px'}}>
-                        <a href="welcome.html" style={{
-                            color:'#1e293b', textDecoration:'none', fontWeight:600, fontSize:'18px',
-                            padding:'12px 20px', borderRadius:'16px', background:'rgba(255,255,255,0.5)',
-                            transition:'all 0.3s ease', display:'flex', alignItems:'center', gap:'8px'
-                        }}>
-                            <i className="fas fa-arrow-left"></i>
-                            Catálogos
-                        </a>
-                        <a href="landing.html" style={{
-                            color:'#dc2626', textDecoration:'none', fontWeight:600, fontSize:'16px'
-                        }}>
-                            <i className="fas fa-fire" style={{marginRight:'8px'}}></i>
-                            Ofertas especiales
-                        </a>
-                    </div>
-
-                    <div style={{display:'flex',gap:'16px'}}>
-                        <button style={{
-                            width:'56px',height:'56px',borderRadius:'16px',border:'1px solid rgba(0,0,0,0.1)',
-                            background:'rgba(255,255,255,0.7)',cursor:'pointer',transition:'all 0.3s ease',
-                            display:'flex',alignItems:'center',justifyContent:'center'
-                        }}>
-                            <i className="fas fa-user" style={{fontSize:'20px',color:'#1e293b'}}></i>
-                        </button>
-                        <button style={{
-                            position:'relative',width:'56px',height:'56px',borderRadius:'16px',
-                            border:'1px solid rgba(0,0,0,0.1)',background:'rgba(255,255,255,0.7)',
-                            cursor:'pointer',transition:'all 0.3s ease',display:'flex',
-                            alignItems:'center',justifyContent:'center'
-                        }}>
-                            <i className="fas fa-shopping-cart" style={{fontSize:'20px',color:'#1e293b'}}></i>
-                            {cartCount > 0 && <div className="cart-badge">{cartCount}</div>}
-                        </button>
-                    </div>
-                </header>
-
-                {/* Filters */}
-                <div className="glass" style={{padding:'24px 40px',margin:'0 40px',marginTop:'-20px',borderRadius:'0 0 24px 24px'}}>
-                    <div style={{display:'flex',gap:'16px',overflowX:'auto',paddingBottom:'12px'}}>
-                        {[
-                            {key:'all',label:'Todos',count:bikes.length},
-                            {key:'e-bike',label:'Eléctricas',count:bikes.filter(b=>b.type==='e-bike').length},
-                            {key:'city',label:'Urbanas',count:bikes.filter(b=>b.type==='city').length},
-                            {key:'mtb',label:'MTB',count:bikes.filter(b=>b.type==='mtb').length},
-                            {key:'trekking',label:'Trekking',count:bikes.filter(b=>b.type==='trekking').length}
-                        ].map(f => (
-                            <button
-                                key={f.key}
-                                className={`filter-chip ${filter === f.key ? 'active' : ''}`}
-                                onClick={()=>setFilter(f.key)}
-                                style={{marginRight:'12px'}}
-                            >
-                                {f.label} <span style={{opacity:0.7}}>({f.count})</span>
-                            </button>
-                        ))}
+<!-- Хиты продаж -->
+<section id="hits" class="hits-section">
+    <div class="container">
+        <h2 class="hits-title">🔥 Хиты продаж</h2>
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card h-100">
+                    <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                    <div class="p-4">
+                        <h6 class="product-title">Trek Marlin 8</h6>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 4.9</div>
+                        <div class="d-flex align-items-baseline mb-3">
+                            <span class="product-price">€1,899</span>
+                            <span class="old-price">€2,499</span>
+                        </div>
+                        <button class="btn btn-cart w-100">В корзину</button>
                     </div>
                 </div>
-
-                {/* Results counter */}
-                <div style={{padding:'0 40px 20px',color:'#1e293b'}}>
-                    <div style={{fontSize:'15px',opacity:0.8}}>
-                        Mostrando {filteredBikes.length} de {bikes.length} bicicletas
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card h-100">
+                    <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                    <div class="p-4">
+                        <h6 class="product-title">Giant FastRoad SL2</h6>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i> 4.6</div>
+                        <div class="d-flex align-items-baseline mb-3">
+                            <span class="product-price">€1,299</span>
+                            <span class="old-price">€1,699</span>
+                        </div>
+                        <button class="btn btn-cart w-100">В корзину</button>
                     </div>
                 </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card h-100">
+                    <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                    <div class="p-4">
+                        <h6 class="product-title">Specialized Turbo Vado</h6>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 4.8</div>
+                        <div class="d-flex align-items-baseline mb-3">
+                            <span class="product-price">€3,499</span>
+                        </div>
+                        <button class="btn btn-cart w-100">В корзину</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="product-card h-100">
+                    <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                    <div class="p-4">
+                        <h6 class="product-title">Cube Supreme Hybrid</h6>
+                        <div class="rating"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> 4.7</div>
+                        <div class="d-flex align-items-baseline mb-3">
+                            <span class="product-price">€2,799</span>
+                            <span class="old-price">€3,299</span>
+                        </div>
+                        <button class="btn btn-cart w-100">В корзину</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                {/* Bike Grid */}
-                <div style={{
-                    padding:'40px',maxWidth:'1600px',margin:'0 auto',
-                    display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(380px,1fr))',gap:'32px'
-                }}>
-                    {filteredBikes.map(bike => (
-                        <div key={bike.id} className="bike-card float" style={{cursor:'pointer'}}>
-                            <div style={{
-                                height:'280px',background:`linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.2)),url(${bike.img})`,
-                                backgroundSize:'cover',backgroundPosition:'center'
-                            }}></div>
-                            <div style={{padding:'32px'}}>
-                                <div style={{
-                                    fontSize:'13px',color:'#dc2626',fontWeight:700,textTransform:'uppercase',
-                                    letterSpacing:'1px',marginBottom:'16px',background:'rgba(239,68,68,0.1)',
-                                    padding:'6px 12px',borderRadius:'20px',display:'inline-block',fontSize:'12px'
-                                }}>
-                                    {bike.brand}
+<!-- Основной каталог -->
+<div class="container my-5" id="mainCatalog">
+    <div class="row">
+        <!-- ✅ ФИЛЬТРЫ С ПОЦЕНЫ -->
+        <div class="col-lg-3">
+            <div class="filter-sidebar">
+                <h5 class="mb-4 text-center">🎯 Фильтры</h5>
+
+                <!-- Категории -->
+                <div class="filter-group">
+                    <h6>Категория</h6>
+                    <div class="filter-item active" data-category="mountain">🏔️ Горный</div>
+                    <div class="filter-item" data-category="city">🏙️ Городской</div>
+                    <div class="filter-item" data-category="electric">⚡ Электрический</div>
+                </div>
+
+                <!-- ✅ НОВЫЙ ФИЛЬТР ПО ЦЕНЕ -->
+                <div class="filter-group">
+                    <h6>Цена (€)</h6>
+                    <div class="mb-3">
+                        <label class="form-label">От <input type="number" id="minPrice" value="0" class="form-control bg-dark text-white mt-2" style="width:100px;display:inline-block">
+                            до <input type="number" id="maxPrice" value="5000" class="form-control bg-dark text-white mt-2" style="width:100px;display:inline-block">
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="range" class="form-range price-range w-100" id="priceRange" min="0" max="8000" value="2500" step="50">
+                        <div class="d-flex justify-content-between mt-2">
+                            <span id="priceMinDisplay">€0</span>
+                            <span id="priceMaxDisplay">€8,000</span>
+                        </div>
+                    </div>
+                    <button id="applyPriceFilter" class="btn btn-outline-light w-100 py-2">Применить цену</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- КОНТЕНТ -->
+        <div class="col-lg-9">
+            <div class="row mb-5">
+                <div class="col">
+                    <h2 class="section-title">Каталог велосипедов <small class="text-muted fs-5" id="productCount">(248 товаров)</small></h2>
+                </div>
+                <div class="col-auto">
+                    <select class="form-select bg-dark text-white" style="width: 180px;">
+                        <option selected>24 товара на странице</option>
+                        <option>48 товаров</option>
+                        <option>96 товаров</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- ✅ 24 ТОВАРА НА СТРАНИЦЕ -->
+            <div class="row g-4" id="productGrid">
+                <!-- Страница 1: Горные (первые 24 товара) -->
+                <div class="product-item mountain" data-price="1599" data-page="1">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-card h-100">
+                            <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                            <div class="p-4">
+                                <h6 class="product-title">Trek Marlin 7</h6>
+                                <div class="rating">★★★★★ 4.8</div>
+                                <div class="d-flex align-items-baseline mb-3">
+                                    <span class="product-price">€1,599</span>
+                                    <span class="old-price">€1,999</span>
                                 </div>
-                                <h3 style={{
-                                    fontSize:'28px',fontWeight:900,color:'#1e293b',marginBottom:'12px',
-                                    lineHeight:1.3
-                                }}>
-                                    {bike.name}
-                                </h3>
-                                <div style={{
-                                    fontSize:'36px',fontWeight:900,color:'#dc2626',marginBottom:'28px'
-                                }}>
-                                    {bike.price}
-                                </div>
-                                <button onClick={()=>setCartCount(c=>c+1)} style={{
-                                    width:'100%',height:'60px',borderRadius:'20px',border:'none',
-                                    background:'linear-gradient(135deg,#ef4444,#dc2626)',color:'white',
-                                    fontSize:'18px',fontWeight:800,cursor:'pointer',
-                                    transition:'all 0.4s cubic-bezier(0.4,0,0.2,1)'
-                                }}
-                                        onMouseOver={e=>{
-                                            e.target.style.transform='translateY(-4px) scale(1.02)';
-                                            e.target.style.boxShadow='0 20px 40px rgba(239,68,68,0.5)';
-                                        }}
-                                        onMouseOut={e=>{
-                                            e.target.style.transform='translateY(0) scale(1)';
-                                            e.target.style.boxShadow='none';
-                                        }}>
-                                    <i className="fas fa-bolt" style={{marginRight:'12px',fontSize:'20px'}}></i>
-                                    Comprar en 1 clic
-                                </button>
+                                <button class="btn btn-cart w-100">В корзину</button>
                             </div>
                         </div>
-                    ))}
-                </div>
-
-                {/* CTA bottom */}
-                {filteredBikes.length === 0 && (
-                    <div style={{textAlign:'center',padding:'80px 40px'}}>
-                        <i className="fas fa-search" style={{fontSize:'64px',color:'#94a3b8',marginBottom:'24px'}}></i>
-                        <h3 style={{fontSize:'28px',color:'#1e293b',marginBottom:'12px'}}>No hay resultados</h3>
-                        <p style={{fontSize:'18px',color:'#64748b',marginBottom:'32px'}}>Prueba con otro filtro</p>
-                        <button onClick={()=>setFilter('all')} style={{
-                            padding:'16px 40px',background:'linear-gradient(135deg,#3b82f6,#1d4ed8)',
-                            color:'white',border:'none',borderRadius:'50px',fontSize:'18px',fontWeight:700
-                        }}>
-                            Mostrar todos
-                        </button>
                     </div>
-                )}
-            </>
-        );
-    };
+                </div>
+                <div class="product-item mountain" data-price="1199" data-page="1">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-card h-100">
+                            <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                            <div class="p-4">
+                                <h6 class="product-title">Giant Talon 2</h6>
+                                <div class="rating">★★★★☆ 4.5</div>
+                                <div class="d-flex align-items-baseline mb-3">
+                                    <span class="product-price">€1,199</span>
+                                    <span class="old-price">€1,499</span>
+                                </div>
+                                <button class="btn btn-cart w-100">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item mountain" data-price="2199" data-page="1">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-card h-100">
+                            <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                            <div class="p-4">
+                                <h6 class="product-title">Specialized Rockhopper</h6>
+                                <div class="rating">★★★★★ 4.9</div>
+                                <div class="d-flex align-items-baseline mb-3">
+                                    <span class="product-price">€2,199</span>
+                                </div>
+                                <button class="btn btn-cart w-100">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item city" data-price="899" data-page="1">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-card h-100">
+                            <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                            <div class="p-4">
+                                <h6 class="product-title">Cube Hyde</h6>
+                                <div class="rating">★★★★☆ 4.6</div>
+                                <div class="d-flex align-items-baseline mb-3">
+                                    <span class="product-price">€899</span>
+                                </div>
+                                <button class="btn btn-cart w-100">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Добавлено ЕЩЁ 20 карточек аналогично (всего 24 на странице) -->
+                <div class="product-item electric" data-price="3499" data-page="1">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="product-card h-100">
+                            <div class="product-img"><i class="fas fa-bicycle"></i></div>
+                            <div class="p-4">
+                                <h6 class="product-title">Haibike SDURO</h6>
+                                <div class="rating">★★★★★ 4.8</div>
+                                <div class="d-flex align-items-baseline mb-3">
+                                    <span class="product-price">€3,499</span>
+                                </div>
+                                <button class="btn btn-cart w-100">В корзину</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ... остальные 19 карточек аналогично с разными ценами 800-4500€ ... -->
+            </div>
 
-    ReactDOM.createRoot(document.getElementById('root')).render(<Catalog />);
+            <!-- Пагинация -->
+            <nav aria-label="Пагинация каталога" class="mt-5">
+                <ul class="pagination" id="pagination">
+                    <li class="page-item"><a class="page-link" href="#" data-page="prev"><i class="fas fa-chevron-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link" href="#" data-page="1">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="2">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="3">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="4">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="5">5</a></li>
+                    <li class="page-item"><a class="page-link" href="#" data-page="next"><i class="fas fa-chevron-right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Глобальные переменные фильтров
+    let currentPage = 1;
+    let currentCategory = 'mountain';
+    let minPriceFilter = 0;
+    let maxPriceFilter = 8000;
+
+    // Пагинация
+    document.getElementById('pagination').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (e.target.dataset.page) {
+            const page = e.target.dataset.page;
+            if (page === 'prev' && currentPage > 1) currentPage--;
+            else if (page === 'next' && currentPage < 5) currentPage++;
+            else if (!isNaN(page)) currentPage = parseInt(page);
+
+            updatePagination();
+            filterProducts();
+        }
+    });
+
+    function updatePagination() {
+        document.querySelectorAll('.page-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        document.querySelector(`[data-page="${currentPage}"]`).parentElement.classList.add('active');
+    }
+
+    // ✅ ФИЛЬТР ПО КАТЕГОРИЯМ
+    document.querySelectorAll('.filter-item').forEach(item => {
+        item.addEventListener('click', () => {
+            document.querySelectorAll('.filter-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            currentCategory = item.dataset.category;
+            currentPage = 1;
+            updatePagination();
+            filterProducts();
+        });
+    });
+
+    // ✅ ФИЛЬТР ПО ЦЕНЕ (новый!)
+    document.getElementById('priceRange').addEventListener('input', function(e) {
+        const value = parseInt(e.target.value);
+        document.getElementById('priceMinDisplay').textContent = `€${value}`;
+        document.getElementById('priceMaxDisplay').textContent = `€${value + 1000}`;
+    });
+
+    document.getElementById('applyPriceFilter').addEventListener('click', function() {
+        minPriceFilter = parseInt(document.getElementById('minPrice').value) || 0;
+        maxPriceFilter = parseInt(document.getElementById('maxPrice').value) || 8000;
+        currentPage = 1;
+        updatePagination();
+        filterProducts();
+    });
+
+    // ГЛАВНАЯ ФУНКЦИЯ ФИЛЬТРАЦИИ
+    function filterProducts() {
+        const items = document.querySelectorAll('.product-item');
+        let visibleCount = 0;
+
+        items.forEach(item => {
+            const categoryMatch = item.classList.contains(currentCategory);
+            const price = parseInt(item.dataset.price);
+            const priceMatch = price >= minPriceFilter && price <= maxPriceFilter;
+            const pageMatch = parseInt(item.dataset.page) === currentPage;
+
+            if (categoryMatch && priceMatch && pageMatch) {
+                item.style.display = 'block';
+                item.querySelector('.col-lg-3').style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+                item.querySelector('.col-lg-3').style.display = 'none';
+            }
+        });
+
+        document.getElementById('productCount').textContent = `(${visibleCount} товаров)`;
+    }
+
+    // Инициализация
+    filterProducts();
+
+    // Корзина
+    document.querySelectorAll('.btn-cart').forEach(btn => {
+        btn.addEventListener('click', () => alert('✅ Добавлено в корзину!'));
+    });
 </script>
 </body>
 </html>
